@@ -52,7 +52,7 @@
   justify-content: center;
 }
 
-.card-type {
+.button {
   margin: 5px;
   padding: 10px;
   background: rgb(216, 216, 216);
@@ -110,6 +110,10 @@
   cursor: pointer;
 }
 
+#search-wrapper {
+  margin: 10px;
+}
+
 #search {
   width: 300px;
 }
@@ -136,12 +140,50 @@
   filter: blur(4px);
 }
 
-body.locked {
-  /* height: 100%;
-  overflow: hidden; */
-  /* position: fixed; */
-}
+/* body.locked {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+} */
 
 .big-card {
   height: 80vh;
+}
+
+#rarity-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.rarity.selected {
+  /* background: gold; */
+  border: 2px solid black;
+}
+
+#common.selected {
+  background: black;
+  color: white;
+}
+
+#uncommon.selected {
+  background-image: linear-gradient(100deg, #688e9b, #c6d8e7  25% 75%, #688e9b);
+  color: black;
+}
+
+#rare.selected {
+  background-image: linear-gradient(100deg, #a0864c, #dcca87  25% 75%, #a0864c);
+  color: black;
+}
+
+#mythic.selected {
+  background-image: linear-gradient(100deg, #d3362f, #faa41a  25% 75%, #d3362f);
+  color: black;
+}
+
+#set-wrapper > * {
+  display: inline-block;
+}
+
+#reset {
+  color: black;
 }

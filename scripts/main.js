@@ -1,7 +1,7 @@
 let cards = [];
-let url = 'https://api.scryfall.com/cards/search?order=cmc&q=set%3Am21';
 
-const getCards = async () => {
+const getCards = async (url) => {
+  console.log(url)
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -13,8 +13,7 @@ const getCards = async () => {
   cards.push(...myJson.data);
 
   if (myJson.has_more) {  // request only returns 175 cards at a time
-    url = myJson.next_page;
-    getCards();
+    getCards(myJson.next_page);
   }
 }
 
@@ -23,6 +22,7 @@ let cardFilters = {
   , 'types'  : []
   , 'costs'  : []
   , 'text'   : ''
+  , 'rarity' : []
   };
 
 const colorIcons = document.querySelectorAll('.color-icon')
@@ -127,6 +127,8 @@ function displayCards(cards, filters) {
         let type = card.type_line.toUpperCase().includes(filter);
         let cardText = card.oracle_text.toUpperCase().includes(filter);
         allowed = allowed && (name || type || cardText);
+      } else if (filterType == 'rarity') {
+        allowed = allowed && filter.includes(card.rarity);
       }
     }
     return allowed;
@@ -137,6 +139,7 @@ function displayCards(cards, filters) {
   filteredCards.forEach(card => {
     let cardDisp = document.createElement('img');
     cardDisp.classList.add('card-img');
+    cardDisp.classList.add('noselect');
     cardDisp.addEventListener('click', showCard)
     cardDisp.src = card.image_uris.normal;
     cardsDisplay.appendChild(cardDisp);
@@ -175,9 +178,74 @@ function getCMC(costStr) {
   }
 }
 
+const rarity = document.querySelectorAll('.rarity');
+rarity.forEach(btn => btn.addEventListener('click', toggleRarity));
+
+function toggleRarity() {
+  this.classList.toggle('selected');
+
+  if (this.classList.contains('selected')) {
+    console.log('jack')
+    cardFilters['rarity'].push(this.id);
+    displayCards(cards, cardFilters);
+  } else {
+    removeFromArr(cardFilters['rarity'], this.id)
+    displayCards(cards, cardFilters);
+  }
+}
+
+const magicSet = document.querySelector('#set-select');
+magicSet.addEventListener('change', updateSet);
+
+function updateSet(e) {
+  console.log(e.target.value);
+  cards = [];
+  init();
+  resetFilters();
+}
+
+const resetBtn = document.querySelector('#reset-button');
+resetBtn.addEventListener('click', resetFilters);
+
+function resetFilters() {
+  colorIcons.forEach(icon => {
+    icon.classList.remove('color-selected');
+  });
+
+  typeButtons.forEach(type => {
+    type.classList.remove('button-selected');
+  });
+  
+  costButtons.forEach(type => {
+    type.classList.remove('button-selected');
+  });
+
+  rarity.forEach(btn => {
+    btn.classList.remove('selected');
+  });
+
+  costLessThan.value = '-1';
+
+  searchInput.value = '';
+
+  cardFilters = {
+    'colors' : []
+  , 'types'  : []
+  , 'costs'  : []
+  , 'text'   : ''
+  , 'rarity' : []
+  };
+  displayCards(cards, cardFilters);
+}
+
+
+// ---------------------------------------
+
 async function init() {
   // video on async funtions: https://www.youtube.com/watch?v=PoRJizFvM7s
-  await getCards();
+  const setValue = document.querySelector('#set-select').value;
+  const url = `https://api.scryfall.com/cards/search?order=cmc&q=set%3A${setValue}`;
+  await getCards(url);
 
   displayCards(cards, cardFilters);
 } 
