@@ -14,4 +14,10 @@ This page uses Scryfall's REST API to pull the cards for each set. It takes a se
 ## Screenshots
 ![No Filter](screenshots/screenshot0.png "No Filter")
 
-![Filter 2](screenshots/screenshot2.png "Filter 2")
+---
+
+![Filter](screenshots/screenshot2.png "Filter")
+
+---
+
+![Card View](screenshots/screenshot3.png "Card View")
