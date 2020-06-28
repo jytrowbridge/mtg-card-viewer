@@ -9,7 +9,9 @@ const getCards = async () => {
     }
   });
   myJson = await response.json(); //extract JSON from the http response
-  cards.push(...myJson.data)
+  
+  cards.push(...myJson.data);
+
   if (myJson.has_more) {  // request only returns 175 cards at a time
     url = myJson.next_page;
     getCards();
@@ -103,12 +105,7 @@ function displayCards(cards, filters) {
     cardsDisplay.removeChild(cardsDisplay.lastElementChild);
   }
 
-  console.log('made it here');
-
-  let filteredCards;
-
-
-  filteredCards = cards.filter(card => {
+  let filteredCards = cards.filter(card => {
     allowed = true;
     for (let filterType in filters) {
       let filter = filters[filterType];
@@ -117,7 +114,6 @@ function displayCards(cards, filters) {
       } else if (filterType == 'colors') {
         allowed = allowed && card.colors.filter(color => filter.includes(color)).length > 0;
       } else if (filterType == 'types') {
-        //return card.type_line.toUpperCase().contains(filters[filterType]);
         allowed = allowed && filter.reduce((found, curr) => found || card.type_line.toUpperCase().includes(curr), false)
       } else if (filterType == 'costs') {
         if (filter.includes(7)) {
@@ -134,7 +130,7 @@ function displayCards(cards, filters) {
       }
     }
     return allowed;
-  })
+  }); 
 
   filteredCards = filteredCards.sort((a, b) => a.name < b.name ? -1 : 1);
 
@@ -157,8 +153,6 @@ bigCardWrapper.addEventListener('click', () => {
   wrapper.classList.remove('blurred')
   document.body.classList.remove('locked')
 })
-//   bigCardWrapper.classList.remove('visible');
-// })
 
 function showCard() {
   bigCardWrapper.classList.add('visible');
@@ -181,5 +175,11 @@ function getCMC(costStr) {
   }
 }
 
-getCards();
-displayCards(cards, cardFilters);
+async function init() {
+  // video on async funtions: https://www.youtube.com/watch?v=PoRJizFvM7s
+  await getCards();
+
+  displayCards(cards, cardFilters);
+} 
+
+init();
