@@ -1,7 +1,6 @@
 let cards = [];
 
 const getCards = async (url) => {
-  console.log(url)
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -94,7 +93,6 @@ const searchInput = document.querySelector('#search');
 searchInput.addEventListener('keyup', search);
 searchInput.value = "";
 function search() {
-  console.log(this.value);
   cardFilters['text'] = this.value.toUpperCase();
   displayCards(cards, cardFilters);
 }
@@ -162,7 +160,6 @@ function showCard() {
   bigCardImg.src = this.src;
   wrapper.classList.add('blurred')
   document.body.classList.add('locked')
-  //console.log(this)
 }
 
 function getCMC(costStr) {
@@ -185,7 +182,6 @@ function toggleRarity() {
   this.classList.toggle('selected');
 
   if (this.classList.contains('selected')) {
-    console.log('jack')
     cardFilters['rarity'].push(this.id);
     displayCards(cards, cardFilters);
   } else {
@@ -198,7 +194,6 @@ const magicSet = document.querySelector('#set-select');
 magicSet.addEventListener('change', updateSet);
 
 function updateSet(e) {
-  console.log(e.target.value);
   cards = [];
   init();
   resetFilters();
