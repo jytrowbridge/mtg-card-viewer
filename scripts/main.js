@@ -123,7 +123,7 @@ function displayCards(cards, filters) {
       } else if (filterType == 'text') {
         let name = card.name.toUpperCase().includes(filter);
         let type = card.type_line.toUpperCase().includes(filter);
-        let cardText = card.oracle_text.toUpperCase().includes(filter);
+        let cardText = card.oracle_text != undefined ? card.oracle_text.toUpperCase().includes(filter) : false;
         allowed = allowed && (name || type || cardText);
       } else if (filterType == 'rarity') {
         allowed = allowed && filter.includes(card.rarity);
