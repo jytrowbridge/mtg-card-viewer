@@ -97,13 +97,8 @@ function search() {
   displayCards(cards, cardFilters);
 }
 
-function displayCards(cards, filters) {
-  // remove current children
-  while (cardsDisplay.lastElementChild) {
-    cardsDisplay.removeChild(cardsDisplay.lastElementChild);
-  }
-
-  let filteredCards = cards.filter(card => {
+function filterCards(cards, filters) {
+  return cards.filter(card => {
     allowed = true;
     for (let filterType in filters) {
       let filter = filters[filterType];
@@ -130,18 +125,39 @@ function displayCards(cards, filters) {
       }
     }
     return allowed;
-  }); 
+  });
+}
 
-  filteredCards = filteredCards.sort((a, b) => a.name < b.name ? -1 : 1);
-
-  filteredCards.forEach(card => {
+function initializeCards(cards) {
+  // Create divs for and display every card and return the array of card elements
+  cards = cards.sort((a, b) => a.name < b.name ? -1 : 1);
+  cards.forEach(card => {
     let cardDisp = document.createElement('img');
     cardDisp.classList.add('card-img');
     cardDisp.classList.add('noselect');
     cardDisp.addEventListener('click', showCard)
     cardDisp.src = card.image_uris.normal;
+    cardDisp.id = card.id;
     cardsDisplay.appendChild(cardDisp);
   });
+  return document.querySelectorAll('.card-img');
+}
+
+
+function displayCards(cards, filters) { //, cardObjs) {
+  let cardObjs = document.querySelectorAll('.card-img');
+  let displayIds = {};
+  filterCards(cards, filters).forEach(card => {
+    displayIds[card.id] = 1;
+  });
+
+  cardObjs.forEach(card => {
+    if (card.id in displayIds) {
+      card.style.display = 'inline';
+    } else {
+      card.style.display = 'none';
+    }
+  });  
 }
 
 const bigCardWrapper = document.querySelector('#big-card-wrapper')
@@ -242,7 +258,9 @@ async function init() {
   const url = `https://api.scryfall.com/cards/search?order=cmc&q=set%3A${setValue}`;
   await getCards(url);
 
-  displayCards(cards, cardFilters);
+  //displayCards(cards, cardFilters);
+  console.log(cards.length)
+  initializeCards(cards);
 } 
 
 init();
