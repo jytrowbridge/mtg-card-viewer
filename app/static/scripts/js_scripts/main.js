@@ -201,3 +201,10 @@ function resetFilters() {
   };
   displayCards(cards, cardFilters);
 }
+
+// setForm = document.getElementById('set-select-form');
+setSelect = document.getElementById('set-select');
+setSelect.addEventListener('change', (e) => {
+  // console.log(e.target.value)
+  window.location.href = `/${e.target.value}`
+})

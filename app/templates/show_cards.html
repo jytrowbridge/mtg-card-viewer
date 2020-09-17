@@ -57,13 +57,13 @@
         <div>
           Set:
         </div>
-        <form action="" method="GET">
+        <form id="set-select-form" action="" method="GET">
           <select id="set-select" name="set-select">
             {% for set_name in set_list: %}
               {% if set_name == default_set: %}
-                <option value="{{ set_name }}" selected="selected">{{ set_name }}</option>
+                <option name="set-name" value="{{ set_name }}" selected="selected">{{ set_name }}</option>
               {% else: %}
-                <option value="{{ set_name }}">{{ set_name }}</option>
+                <option name="set-name" value="{{ set_name }}">{{ set_name }}</option>
               {% endif %}
             {% endfor %}
           </select>
