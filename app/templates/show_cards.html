@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  <title>MTG Card Search</title>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="options-wrapper">
+      <div id="color-pick" class="option">
+        <img class="color-icon" data-color="W" src="{{ url_for('static', filename='/icons/W.svg') }}"></img>
+        <img class="color-icon" data-color="U" src="{{ url_for('static', filename='/icons/U.svg') }}"></img>
+        <img class="color-icon" data-color="B" src="{{ url_for('static', filename='/icons/B.svg') }}"></img>
+        <img class="color-icon" data-color="R" src="{{ url_for('static', filename='/icons/R.svg') }}"></img>
+        <img class="color-icon" data-color="G" src="{{ url_for('static', filename='/icons/G.svg') }}"></img>
+      </div>
+      <div id="type-pick" class="option">
+        <div class="button card-type noselect">LAND</div>
+        <div class="button card-type noselect">CREATURE</div>
+        <div class="button card-type noselect">ARTIFACT</div>
+        <div class="button card-type noselect">ENCHANTMENT</div>
+        <div class="button card-type noselect">INSTANT</div>
+        <div class="button card-type noselect">SORCERY</div>
+        <div class="button card-type noselect">PLANESWALKER</div>
+      </div>
+      <div id="mana-cost" class="option">
+        <div>
+          CMC less than or equal to:
+          <select id="max-cost" name="max-cost">
+            <option value="-1" selected="selected">n/a</option>
+            {% for i in range(7): %}
+              <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div id="cost-buttons-wrapper">
+          {% for i in range(7): %}
+            <div class="cost-button noselect">{{ i }}</div>
+          {% endfor %}
+          <div class="cost-button noselect">7+</div>
+        </div>
+      </div>
+      <div id="rarity-wrapper">
+        <div id="common" class="button rarity noselect">COMMON</div>
+        <div id="uncommon" class="button rarity noselect">UNCOMMON</div>
+        <div id="rare" class="button rarity noselect">RARE</div>
+        <div id="mythic" class="button rarity noselect">MYTHIC</div>
+      </div>
+      <div id="search-wrapper">
+        <div>
+          Keyword search:
+        </div>
+        <input type="text" id="search">
+      </div>
+      <div id="set-wrapper">
+        <div>
+          Set:
+        </div>
+        <form action="" method="GET">
+          <select id="set-select" name="set-select">
+            {% for set_name in set_list: %}
+              {% if set_name == default_set: %}
+                <option value="{{ set_name }}" selected="selected">{{ set_name }}</option>
+              {% else: %}
+                <option value="{{ set_name }}">{{ set_name }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </form>
+        <div id="reset-button" class="button">RESET FILTERS</div>
+      </div>
+    </div>
+    <div id="card-display">
+      {% for card in cards %}
+        {% if 'card_faces' in card %}
+          <img class="card-img noselect" data-id="{{ card['id'] }}" src="{{ card['card_faces'][0]['image_uris']['normal'] }}">
+        {% else %}
+          <img class="card-img noselect" data-id="{{ card['id'] }}" src="{{ card['image_uris']['normal'] }}">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <div id="big-card-wrapper">
+    <img class="big-card"></img>
+  </div>
+  <div>
+    <!-- {{ cards_abridged }} -->
+  </div>
+  <script>
+    // console.log('{{ cards_json_raw }}')
+    // const cards = JSON.parse('{{ cards_json_raw | tojson | safe }}');
+    // const cards_json_raw = '{{ cards_json_raw }}'.replaceAll('&#34;', '"');
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw);
+
+    // const test_json_raw = '{{ test_json | tojson }}';
+    // const test_json = JSON.parse(test_json_raw)
+    // const cards = 'jack was here'
+
+    // const cards_json_raw = '{{ cards_json | tojson }}';
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw)
+
+    // const cards_json_raw = '{{ cards_abridged | tojson }}';
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw)
+  </script>
+  <script src="{{ url_for('static', filename='/scripts/js_scripts/test.js') }}"></script>
+  <!-- <script src="scripts/main.js"></script> -->
+</body>
