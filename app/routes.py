@@ -16,26 +16,33 @@ def remove_control_characters(s):
 @app.route('/index')
 def default():
     cards = get_set_json(default_set)['cards']
-    # test_dic = {'jack': 'cool'}
 
     card_text = {}
 
     cards_abridged = {}
     for card in cards:
-        if 'card_faces' in card and len(card['card_faces']) > 0:
-            continue
         card_dic = {}
+        if 'card_faces' in card and len(card['card_faces']) > 0:
+            card_text = card['card_faces'][0]['oracle_text']
+            card_dic['image_url'] = card['card_faces'][0]['image_uris']['normal']
+            card_dic['colors'] = card['card_faces'][0]['colors']
+        else:
+            card_text = card['oracle_text']
+            card_dic['image_url'] = card['image_uris']['normal']
+            card_dic['colors'] = card['colors']
+
         attributes = [
             'id',
             'name',
             'type_line',
             'rarity',
-            'colors',
+            # 'colors',
             'cmc'
         ]
+
         for attr in attributes:
             card_dic[attr] = card[attr]
-        card_text = card['oracle_text']
+
         card_text = re.sub(r'\n', ' ', card_text)
         card_text = re.sub(r'[^A-Za-z0-9\/\.,\-+:\* ]', '', card_text)
         card_dic['card_text'] = card_text
@@ -43,11 +50,10 @@ def default():
         cards_abridged[card['id']] = card_dic
 
     return render_template(
-            'test.html',
+            'show_cards.html',
             set_list=set_list,
             default_set=default_set,
-            cards_json=cards_abridged,
-            cards=cards
+            cards=cards_abridged
         )
 
 

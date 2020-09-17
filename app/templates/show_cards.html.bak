@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-
 <head>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
   <title>MTG Card Search</title>
 </head>
-
 <body>
   <div id="wrapper">
     <div id="options-wrapper">
@@ -30,13 +28,13 @@
           <select id="max-cost" name="max-cost">
             <option value="-1" selected="selected">n/a</option>
             {% for i in range(7): %}
-            <option value="{{ i }}">{{ i }}</option>
+              <option value="{{ i }}">{{ i }}</option>
             {% endfor %}
           </select>
         </div>
         <div id="cost-buttons-wrapper">
           {% for i in range(7): %}
-          <div class="cost-button noselect">{{ i }}</div>
+            <div class="cost-button noselect">{{ i }}</div>
           {% endfor %}
           <div class="cost-button noselect">7+</div>
         </div>
@@ -60,11 +58,11 @@
         <form action="" method="GET">
           <select id="set-select" name="set-select">
             {% for set_name in set_list: %}
-            {% if set_name == default_set: %}
-            <option value="{{ set_name }}" selected="selected">{{ set_name }}</option>
-            {% else: %}
-            <option value="{{ set_name }}">{{ set_name }}</option>
-            {% endif %}
+              {% if set_name == default_set: %}
+                <option value="{{ set_name }}" selected="selected">{{ set_name }}</option>
+              {% else: %}
+                <option value="{{ set_name }}">{{ set_name }}</option>
+              {% endif %}
             {% endfor %}
           </select>
         </form>
@@ -84,9 +82,28 @@
   <div id="big-card-wrapper">
     <img class="big-card"></img>
   </div>
+  <div>
+    <!-- {{ cards_abridged }} -->
+  </div>
   <script>
-    // console.log('{{ cards_json }}');
-    const cards_json = JSON.parse('{{ cards_json | tojson | safe }}');
+    // console.log('{{ cards_json_raw }}')
+    // const cards = JSON.parse('{{ cards_json_raw | tojson | safe }}');
+    // const cards_json_raw = '{{ cards_json_raw }}'.replaceAll('&#34;', '"');
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw);
+
+    // const test_json_raw = '{{ test_json | tojson }}';
+    // const test_json = JSON.parse(test_json_raw)
+    // const cards = 'jack was here'
+
+    // const cards_json_raw = '{{ cards_json | tojson }}';
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw)
+
+    // const cards_json_raw = '{{ cards_abridged | tojson }}';
+    // console.log(cards_json_raw);
+    // const cards = JSON.parse(cards_json_raw)
   </script>
   <script src="{{ url_for('static', filename='/scripts/js_scripts/test.js') }}"></script>
+  <!-- <script src="scripts/main.js"></script> -->
 </body>

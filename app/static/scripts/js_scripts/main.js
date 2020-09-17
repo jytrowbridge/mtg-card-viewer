@@ -1,28 +1,15 @@
-let cards = [];
-
-const getCards = async (url) => {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  myJson = await response.json(); //extract JSON from the http response
-  
-  cards.push(...myJson.data);
-
-  if (myJson.has_more) {  // request only returns 175 cards at a time
-    getCards(myJson.next_page);
-  }
+cards = [];
+for (var i in cards_json) {
+  cards.push(cards_json[i]);
 }
 
 let cardFilters = {
-    'colors' : []
-  , 'types'  : []
-  , 'costs'  : []
-  , 'text'   : ''
-  , 'rarity' : []
-  };
+  'colors': []
+  , 'types': []
+  , 'costs': []
+  , 'text': ''
+  , 'rarity': []
+};
 
 const colorIcons = document.querySelectorAll('.color-icon')
 colorIcons.forEach(icon => icon.addEventListener('click', toggleColor));
@@ -56,9 +43,9 @@ costButtons.forEach(btn => btn.addEventListener('click', toggleButton));
 function toggleButton() {
   this.classList.toggle('button-selected')
 
-  let filterType = this.classList.contains('card-type') ? 'types' : 
-                   this.classList.contains('cost-button') ? 'costs' : '';
-  let filterValue = this.classList.contains('cost-button') ? parseInt(this.innerHTML) : this.innerHTML;                   
+  let filterType = this.classList.contains('card-type') ? 'types' :
+    this.classList.contains('cost-button') ? 'costs' : '';
+  let filterValue = this.classList.contains('cost-button') ? parseInt(this.innerHTML) : this.innerHTML;
   if (this.classList.contains('button-selected')) {
     cardFilters[filterType].push(filterValue);
     displayCards(cards, cardFilters);
@@ -73,7 +60,7 @@ costLessThan.addEventListener('change', e => {
   let maxCost = e.target.value;
   cardFilters['costs'] = [];
   if (maxCost != -1) {
-    for(let i = 0; i <= maxCost; i++) {
+    for (let i = 0; i <= maxCost; i++) {
       cardFilters['costs'].push(i);
     }
   }
@@ -98,12 +85,8 @@ function search() {
 }
 
 function displayCards(cards, filters) {
-  // remove current children
-  while (cardsDisplay.lastElementChild) {
-    cardsDisplay.removeChild(cardsDisplay.lastElementChild);
-  }
 
-  let filteredCards = cards.filter(card => {
+  let allowedCards = cards.filter(card => {
     allowed = true;
     for (let filterType in filters) {
       let filter = filters[filterType];
@@ -115,33 +98,36 @@ function displayCards(cards, filters) {
         allowed = allowed && filter.reduce((found, curr) => found || card.type_line.toUpperCase().includes(curr), false)
       } else if (filterType == 'costs') {
         if (filter.includes(7)) {
-          gtSeven = getCMC(card.mana_cost) > 7;
+          gtSeven = card.cmc > 7;
         } else {
           gtSeven = false;
         }
-        allowed = allowed && (filter.includes(getCMC(card.mana_cost)) || gtSeven);
+        allowed = allowed && (filter.includes(card.cmc) || gtSeven);
       } else if (filterType == 'text') {
         let name = card.name.toUpperCase().includes(filter);
         let type = card.type_line.toUpperCase().includes(filter);
-        let cardText = card.oracle_text != undefined ? card.oracle_text.toUpperCase().includes(filter) : false;
+        let cardText = card.card_text != undefined ? card.card_text.toUpperCase().includes(filter) : false;
         allowed = allowed && (name || type || cardText);
       } else if (filterType == 'rarity') {
         allowed = allowed && filter.includes(card.rarity);
       }
     }
     return allowed;
-  }); 
-
-  filteredCards = filteredCards.sort((a, b) => a.name < b.name ? -1 : 1);
-
-  filteredCards.forEach(card => {
-    let cardDisp = document.createElement('img');
-    cardDisp.classList.add('card-img');
-    cardDisp.classList.add('noselect');
-    cardDisp.addEventListener('click', showCard)
-    cardDisp.src = card.image_uris.normal;
-    cardsDisplay.appendChild(cardDisp);
   });
+
+  const allowedCardIDs = allowedCards.map(card => card.id);
+
+  console.log(allowedCardIDs)
+
+  cardDivs.forEach(cardDiv => {
+    if (allowedCardIDs.includes(cardDiv.dataset.id)) {
+      cardDiv.style.display = 'inline';
+    } else {
+      cardDiv.style.display = 'none';
+    }
+  });
+
+  // filteredCards = filteredCards.sort((a, b) => a.name < b.name ? -1 : 1);
 }
 
 const bigCardWrapper = document.querySelector('#big-card-wrapper')
@@ -155,6 +141,8 @@ bigCardWrapper.addEventListener('click', () => {
   document.body.classList.remove('locked')
 })
 
+
+
 function showCard() {
   bigCardWrapper.classList.add('visible');
   bigCardImg.src = this.src;
@@ -162,18 +150,8 @@ function showCard() {
   document.body.classList.add('locked')
 }
 
-function getCMC(costStr) {
-  // {4}{B}{B}{B}
-  regex = /[{}X]/gi;
-  parts = costStr.replaceAll(regex, '').split('');
-  if (parts.length == 0) return 0;
-  first_char = parts.shift();
-  if (isNaN(parseInt(first_char))) {
-    return 1 + parts.length;
-  } else {
-    return parseInt(first_char) + parts.length;
-  }
-}
+const cardDivs = document.querySelectorAll('.card-img');
+cardDivs.forEach(card => card.addEventListener('click', showCard));
 
 const rarity = document.querySelectorAll('.rarity');
 rarity.forEach(btn => btn.addEventListener('click', toggleRarity));
@@ -190,15 +168,6 @@ function toggleRarity() {
   }
 }
 
-const magicSet = document.querySelector('#set-select');
-magicSet.addEventListener('change', updateSet);
-
-function updateSet(e) {
-  cards = [];
-  init();
-  resetFilters();
-}
-
 const resetBtn = document.querySelector('#reset-button');
 resetBtn.addEventListener('click', resetFilters);
 
@@ -210,7 +179,7 @@ function resetFilters() {
   typeButtons.forEach(type => {
     type.classList.remove('button-selected');
   });
-  
+
   costButtons.forEach(type => {
     type.classList.remove('button-selected');
   });
@@ -224,25 +193,11 @@ function resetFilters() {
   searchInput.value = '';
 
   cardFilters = {
-    'colors' : []
-  , 'types'  : []
-  , 'costs'  : []
-  , 'text'   : ''
-  , 'rarity' : []
+    'colors': []
+    , 'types': []
+    , 'costs': []
+    , 'text': ''
+    , 'rarity': []
   };
   displayCards(cards, cardFilters);
 }
-
-
-// ---------------------------------------
-
-async function init() {
-  // video on async funtions: https://www.youtube.com/watch?v=PoRJizFvM7s
-  const setValue = document.querySelector('#set-select').value;
-  const url = `https://api.scryfall.com/cards/search?order=cmc&q=set%3A${setValue}`;
-  await getCards(url);
-
-  displayCards(cards, cardFilters);
-} 
-
-init();
