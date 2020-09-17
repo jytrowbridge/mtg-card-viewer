@@ -17,12 +17,12 @@ The first version of this project used vanilla HTML, CSS, and JavaScript.
 I am planning on adding an interface for card evaulations, as well as functionality for grouping and sorting cards. 
 
 ## Screenshots
-![No Filter](screenshots/screenshot0.png "No Filter")
+![No Filter](app/static/screenshots/screenshot0.png "No Filter")
 
 ---
 
-![Filter](screenshots/screenshot2.png "Filter")
+![Filter](app/static/screenshots/screenshot2.png "Filter")
 
 ---
 
-![Card View](screenshots/screenshot3.png "Card View")
+![Card View](app/static/screenshots/screenshot3.png "Card View")
