@@ -1,1 +1,1 @@
-web: gunicorn app:card_search
+web: gunicorn app:app
