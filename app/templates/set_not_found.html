@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  <title>MTG Card Search</title>
+</head>
+<body>
+  <div id="set-not-found-wrapper">
+    <div class="title">
+      The set you were looking for was not found.
+    </div>
+    <div>
+      <a href="/">
+        <img id="set-not-found-img" src="{{ url_for('static', filename='fblthp.jpg') }}">
+      </a>
+    </div>
+  </div>
+</body>

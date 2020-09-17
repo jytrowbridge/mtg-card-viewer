@@ -14,6 +14,9 @@ def default():
 @app.route('/<set_name>')
 @app.route('/index')
 def display_set(set_name):
+    set_name = set_name.upper()
+    if set_name not in set_list:
+        return render_template('set_not_found.html')
     return display_cards(set_name)
 
 

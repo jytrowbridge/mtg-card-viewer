@@ -187,3 +187,20 @@
 #reset {
   color: black;
 }
+
+#set-not-found-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#set-not-found-wrapper .title {
+  font-weight: bolder;
+  font-size: xx-large;
+}
+
+#set-not-found-img {
+  border-radius: 50%;
+  margin-top: 30px;
+}
