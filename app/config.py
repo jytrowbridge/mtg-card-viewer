@@ -1,4 +1,5 @@
-root_dir = '/home/jack/Documents/programming/mtg-set-search/'
+# root_dir = '/home/jack/Documents/programming/mtg-set-search/'
+root_dir = ''
 
 set_list = [
     'ZNR',
