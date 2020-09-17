@@ -7,7 +7,7 @@ from app import config
 
 def get_set_json(set_name):
     # Return JSON from file in json_card_files associated with given set_name.
-    set_file = f'{config.root_dir}/app/static/json_card_files/{set_name}_cards.json'
+    set_file = f'app/static/json_card_files/{set_name}_cards.json'
     with open(set_file) as f:
         return json.load(f)
 
