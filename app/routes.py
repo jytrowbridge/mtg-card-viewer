@@ -1,5 +1,4 @@
 from flask import render_template
-import json
 from app import app
 from app.config import set_list, default_set
 from app.static.scripts.py_scripts.get_set_json import get_abridged_cards

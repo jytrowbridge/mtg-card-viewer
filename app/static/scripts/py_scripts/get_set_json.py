@@ -6,14 +6,16 @@ from app import config
 
 
 def get_set_json(set_name):
+    # Return JSON from file in json_card_files associated with given set_name.
     set_file = f'{config.root_dir}/app/static/json_card_files/{set_name}_cards.json'
     with open(set_file) as f:
         return json.load(f)
 
+
 def get_cmc(mana_cost):
     # Return cmc value given mana_cost in string form
 
-    mana_cost = mana_cost[1:-1] # remove opening and closing bracket
+    mana_cost = mana_cost[1:-1]  # remove opening and closing bracket
     mana_parts = mana_cost.split('}{')
     cmc = 0
     if mana_parts[0].isnumeric():
@@ -23,7 +25,10 @@ def get_cmc(mana_cost):
             cmc += 1
     return cmc
 
+
 def get_abridged_cards(set_name):
+    # Return dictionary of cards with select attributes.
+    # Accepts parameter <set_name>, which should have an associated file in the json_card_files directory.
     cards = get_set_json(set_name)['cards']
 
     cards_abridged = {}
