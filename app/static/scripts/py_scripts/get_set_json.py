@@ -10,6 +10,19 @@ def get_set_json(set_name):
     with open(set_file) as f:
         return json.load(f)
 
+def get_cmc(mana_cost):
+    # Return cmc value given mana_cost in string form
+
+    mana_cost = mana_cost[1:-1] # remove opening and closing bracket
+    mana_parts = mana_cost.split('}{')
+    cmc = 0
+    if mana_parts[0].isnumeric():
+        cmc += int(mana_parts.pop(0))
+    for mana_symbol in mana_parts:
+        if mana_symbol != 'X':
+            cmc += 1
+    return cmc
+
 def get_abridged_cards(set_name):
     cards = get_set_json(set_name)['cards']
 
@@ -17,14 +30,28 @@ def get_abridged_cards(set_name):
     for card in cards:
         card_dic = {}
         card_text = {}
-        if 'card_faces' in card and len(card['card_faces']) > 0:
+        if card['layout'] == 'modal_dfc':
             card_text = card['card_faces'][0]['oracle_text']
             card_dic['image_url'] = card['card_faces'][0]['image_uris']['normal']
             card_dic['colors'] = card['card_faces'][0]['colors']
+            card_dic['cmc'] = [card['cmc']]
+        elif card['layout'] == 'split' or card['layout'] == 'adventure':
+            # the cmc value is broken; it combines the cmc's of the two sides
+            # The images also do not contain the full text for split cards
+            card_text = []
+            cmc = []
+            for card_face in card['card_faces']:
+                card_text.append(card_face['oracle_text'])
+                cmc.append(get_cmc(card_face['mana_cost']))
+            card_text = ','.join(card_text)
+            card_dic['cmc'] = cmc
+            card_dic['image_url'] = card['image_uris']['normal']
+            card_dic['colors'] = card['colors']
         else:
             card_text = card['oracle_text']
             card_dic['image_url'] = card['image_uris']['normal']
             card_dic['colors'] = card['colors']
+            card_dic['cmc'] = [card['cmc']]
 
         attributes = [
             'id',
@@ -32,7 +59,7 @@ def get_abridged_cards(set_name):
             'type_line',
             'rarity',
             # 'colors',
-            'cmc'
+            # 'cmc'
         ]
 
         for attr in attributes:

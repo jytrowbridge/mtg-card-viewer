@@ -98,11 +98,12 @@ function displayCards(cards, filters) {
         allowed = allowed && filter.reduce((found, curr) => found || card.type_line.toUpperCase().includes(curr), false)
       } else if (filterType == 'costs') {
         if (filter.includes(7)) {
-          gtSeven = card.cmc > 7;
+          // gtSeven = card.cmc > 7;
+          gtSeven = card.cmc.reduce((result, num) => result || num > 7, false);
         } else {
           gtSeven = false;
         }
-        allowed = allowed && (filter.includes(card.cmc) || gtSeven);
+        allowed = allowed && (filter.reduce((result, num) => result || card.cmc.includes(num), false) || gtSeven);
       } else if (filterType == 'text') {
         let name = card.name.toUpperCase().includes(filter);
         let type = card.type_line.toUpperCase().includes(filter);
