@@ -1,7 +1,8 @@
-# root_dir = '/home/jack/Documents/programming/mtg-set-search/'
-root_dir = ''
+root_dir = '/home/jack/Documents/programming/mtg-set-search/'
+# root_dir = ''
 
 set_list = [
+    'KHM',
     'ZNR',
     'AKR',
     'M21',
@@ -17,4 +18,4 @@ set_list = [
     'DOM'
 ]
 
-default_set = 'ZNR'
+default_set = 'KHM'
