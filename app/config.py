@@ -1,7 +1,9 @@
-root_dir = '/home/jack/Documents/programming/mtg-set-search/'
+root_dir = '/mnt/c/Users/Jack Trowbridge/Documents/_Jack/programming/mtg-card-viewer/'
 # root_dir = ''
 
 set_list = [
+    'AFR',
+    'STX',
     'KHM',
     'ZNR',
     'AKR',
@@ -18,4 +20,4 @@ set_list = [
     'DOM'
 ]
 
-default_set = 'KHM'
+default_set = 'AFR'
