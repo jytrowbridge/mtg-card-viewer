@@ -38,7 +38,7 @@ def get_file_name(out_dir, set_name):
 
 
 if __name__ == "__main__":
-    out_dir = config.root_dir + '/app/static/json_card_files'
+    out_dir = config.root_dir + 'app/static/json_card_files'
 
     for set_name in config.set_list:
         file_name = get_file_name(out_dir, set_name)
